@@ -134,6 +134,32 @@ Each test should include:
 # - Ensure that duplicate emails are not allowed.
 # - Verify that accounts must have a unique email in the database.
 
-# TODO 11: Test Role-Based Access
-# - Ensure users with different roles ('admin', 'user', 'guest') have appropriate permissions.
-# - Verify that role changes are correctly reflected in the database.
+# TODO 12: Test Account Deletion (Student 11)
+# ===========================
+# Test: Account Deletion
+# Author: Minting X
+# Date: 2025-06-06
+# Description: Ensure an account can be deleted from the database.
+# ===========================
+def test_account_deletion():
+    """Test deleting an account from the database"""
+    
+    # Create a new account
+    account = Account(name="Test User", email="testuser@example.com")
+
+    # Save it to the database
+    db.session.add(account)
+    db.session.commit()
+
+    # Confirm the account exists
+    existing = Account.query.filter_by(email="testuser@example.com").first()
+    assert existing is not None  # test will fail if it's not found
+
+    # Call the delete() method
+    existing.delete()
+
+    # Try to find it again
+    deleted = Account.query.filter_by(email="testuser@example.com").first()
+
+    # Confirm it's gone
+    assert deleted is None
